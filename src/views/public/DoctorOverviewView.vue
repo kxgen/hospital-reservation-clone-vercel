@@ -3,7 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Header from '@/layouts/Header.vue'
 import Footer from '@/layouts/Footer.vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 
 const props = defineProps({
   id: { type: String, required: true }
@@ -46,7 +46,7 @@ const currentWeekRangeLabel = computed(() => {
 onMounted(async () => {
   try {
     const doctorId = route.params.id
-    const res = await axios.get(`/api/doctors/${doctorId}`)
+    const res = await apiClient.get(`/api/doctors/${doctorId}`)
     const data = res.data
     
     doctor.value = {

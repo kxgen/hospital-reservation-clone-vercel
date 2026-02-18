@@ -72,7 +72,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import axios from "@/api/axios";
+import apiClient from "@/api/axios";
 import Skeleton from "@/components/Skeleton.vue";
 import DashboardChart from "@/components/admin/PieChart.vue";
 import BarChart from "@/components/admin/BarChart.vue";
@@ -120,12 +120,12 @@ const peakDay = computed(() => {
 const loadDashboard = async () => {
   try {
     loading.value = true;
-    const statsRes = await axios.get("/api/receptionist/dashboard/stats", { 
+    const statsRes = await apiClient.get("/api/receptionist/dashboard/stats", { 
       headers: { Authorization: `Bearer ${auth.token}` } 
     });
     stats.value = statsRes.data;
 
-    const weeklyRes = await axios.get("/api/receptionist/dashboard/weekly-stats", { 
+    const weeklyRes = await apiClient.get("/api/receptionist/dashboard/weekly-stats", { 
       headers: { Authorization: `Bearer ${auth.token}` } 
     });
     

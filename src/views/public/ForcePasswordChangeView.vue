@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useAlertStore } from '@/stores/alertStore'
@@ -33,7 +33,7 @@ const handleSubmit = async () => {
 
   isLoading.value = true
   try {
-    await axios.post('/api/account/change-password', {
+    await apiClient.post('/api/account/change-password', {
       current: "", // Not required for forced reset
       new: newPassword.value
     }, {

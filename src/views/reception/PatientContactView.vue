@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAuthStore } from '@/stores/auth'
 import { useAlertStore } from '@/stores/alertStore'
 
@@ -26,7 +26,7 @@ const getAuthHeaders = () => ({
 const fetchPatients = async () => {
   isLoading.value = true
   try {
-    const res = await axios.get(`/api/patient`, getAuthHeaders())
+    const res = await apiClient.get(`/api/patient`, getAuthHeaders())
     patients.value = res.data || []
   } catch (err) {
     console.error('Failed to load patients', err)
@@ -38,7 +38,7 @@ const fetchPatients = async () => {
 const fetchEscalations = async () => {
   isLoading.value = true
   try {
-    const res = await axios.get(`/api/receptionist/appointments/escalations`, getAuthHeaders())
+    const res = await apiClient.get(`/api/receptionist/appointments/escalations`, getAuthHeaders())
     escalations.value = res.data || []
   } catch (err) {
     console.error('Failed to load escalations', err)
@@ -71,7 +71,7 @@ const sendNotification = async () => {
 
   isSending.value = true
   try {
-    await axios.post(`/api/notifications/send`, {
+    await apiClient.post(`/api/notifications/send`, {
       patientId: selectedPatient.value.patientId || selectedPatient.value.patientDbId,
       title: messageTitle.value,
       message: messageText.value,
@@ -91,7 +91,7 @@ const sendNotification = async () => {
 const handleCancel = async (id) => {
     if (!confirm('Are you sure you want to cancel this unconfirmed appointment?')) return
     try {
-        await axios.put(`/api/appointments/${id}/cancel`, {}, getAuthHeaders())
+        await apiClient.put(`/api/appointments/${id}/cancel`, {}, getAuthHeaders())
         alertStore.showAlert('Appointment cancelled successfully.', 'success')
         fetchEscalations()
     } catch (err) {

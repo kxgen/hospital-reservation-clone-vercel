@@ -128,7 +128,7 @@
 
 <script setup>
 import { ref, watch, computed, onMounted } from 'vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAuthStore } from '@/stores/auth'
 import { useAlertStore } from '@/stores/alertStore'
 import { toLocalDateString } from '@/utils/dateFormatter'
@@ -180,7 +180,7 @@ const currentWeekRange = computed(() => {
 const fetchDoctors = async () => {
   isLoadingDoctors.value = true
   try {
-    const res = await axios.get(`/api/doctors`, {
+    const res = await apiClient.get(`/api/doctors`, {
       headers: { Authorization: `Bearer ${auth.token}` }
     })
     doctors.value = res.data
@@ -200,7 +200,7 @@ const fetchSchedule = async () => {
   form.value.selectedSlots = [] 
   
   try {
-    const res = await axios.get(`/api/doctors/${form.value.doctorId}/full-schedule`, {
+    const res = await apiClient.get(`/api/doctors/${form.value.doctorId}/full-schedule`, {
       headers: { Authorization: `Bearer ${auth.token}` }
     })
     allSlots.value = res.data
@@ -326,7 +326,7 @@ const submitBlock = async () => {
   let failCount = 0
   for (const range of ranges) {
     try {
-        await axios.post(`/api/receptionist/doctor/block`, {
+        await apiClient.post(`/api/receptionist/doctor/block`, {
             doctorId: parseInt(form.value.doctorId), // Use parsed int
             startTime: range.start,
             endTime: range.end,

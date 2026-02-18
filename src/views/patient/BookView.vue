@@ -109,7 +109,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAuthStore } from '@/stores/auth'
 import { useAlertStore } from '@/stores/alertStore'
 import TimeslotModal from '@/components/TimeSlotModal.vue'
@@ -145,7 +145,7 @@ onMounted(async () => {
   }
   
   try {
-    const res = await axios.get(`/api/doctors/${doctorId}`)
+    const res = await apiClient.get(`/api/doctors/${doctorId}`)
     doctor.value = res.data
     appointments.value = doctor.value.timeslots || []
   } catch (err) {
@@ -183,7 +183,7 @@ const confirmBooking = async () => {
       Reason: reason.value
     }
 
-    const response = await axios.post('/api/appointments', payload, {
+    const response = await apiClient.post('/api/appointments', payload, {
       headers: { Authorization: `Bearer ${auth.token}` }
     })
 

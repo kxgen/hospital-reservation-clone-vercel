@@ -140,7 +140,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAuthStore } from '@/stores/auth'
 import { useAlertStore } from '@/stores/alertStore'
 import ConfirmationModal from '@/components/ConfirmationModal.vue'
@@ -192,7 +192,7 @@ const requestBooking = async () => {
     }
 
     try {
-        const res = await axios.get(`/api/receptionist/search-patient?phone=${encodeURIComponent(form.value.Phone)}`, {
+        const res = await apiClient.get(`/api/receptionist/search-patient?phone=${encodeURIComponent(form.value.Phone)}`, {
              headers: { Authorization: `Bearer ${auth.token}` }
         })
         if(res.data) {
@@ -255,7 +255,7 @@ const confirmBooking = async () => {
       PatientId: selectedPatientId.value
     }
 
-    await axios.post('/api/receptionist/book', payload, {
+    await apiClient.post('/api/receptionist/book', payload, {
       headers: { Authorization: `Bearer ${auth.token}` }
     })
 

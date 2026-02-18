@@ -102,7 +102,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAuthStore } from '@/stores/auth'
 import { useAlertStore } from '@/stores/alertStore'
 import Skeleton from '@/components/Skeleton.vue'
@@ -124,7 +124,7 @@ const fetchNotifications = async () => {
   isLoading.value = true
   try {
     const endpoint = activeTab.value === 'new' ? '/api/notifications/unread' : '/api/notifications/history'
-    const res = await axios.get(`${endpoint}`, {
+    const res = await apiClient.get(`${endpoint}`, {
       headers: { Authorization: `Bearer ${auth.token}` }
     })
     notifications.value = res.data || []
@@ -147,7 +147,7 @@ const markAsRead = async (id) => {
         notifications.value = notifications.value.filter(n => n.id !== id)
     }
     
-    await axios.put(`/api/notifications/${id}/read`, {}, {
+    await apiClient.put(`/api/notifications/${id}/read`, {}, {
       headers: { Authorization: `Bearer ${auth.token}` }
     })
     auth.fetchUnreadCount()
@@ -161,7 +161,7 @@ const markAllAsRead = async () => {
     if (activeTab.value === 'new') {
         notifications.value = []
     }
-    await axios.put(`/api/notifications/read-all`, {}, {
+    await apiClient.put(`/api/notifications/read-all`, {}, {
       headers: { Authorization: `Bearer ${auth.token}` }
     })
     auth.fetchUnreadCount()
@@ -172,7 +172,7 @@ const markAllAsRead = async () => {
 
 const handleConfirm = async (alert) => {
     try {
-        await axios.post(`/api/notifications/confirm-appointment/${alert.appointmentId}`, {}, {
+        await apiClient.post(`/api/notifications/confirm-appointment/${alert.appointmentId}`, {}, {
             headers: { Authorization: `Bearer ${auth.token}` }
         })
         alertStore.showAlert('Attendance confirmed.', 'success')

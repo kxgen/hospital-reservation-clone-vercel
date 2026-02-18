@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAuthStore } from '@/stores/auth'
 import { formatTime, formatDate } from '@/utils/dateFormatter'
 
@@ -17,7 +17,7 @@ const error = ref(null)
 const fetchDetails = async () => {
   isLoading.value = true
   try {
-    const res = await axios.get(`/api/appointments/${appointmentId}/followup-details`, {
+    const res = await apiClient.get(`/api/appointments/${appointmentId}/followup-details`, {
       headers: { Authorization: `Bearer ${auth.token}` }
     })
     details.value = res.data

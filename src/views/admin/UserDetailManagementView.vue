@@ -140,7 +140,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAlertStore } from '@/stores/alertStore'
 import ResetPasswordModal from '@/components/admin/ResetPasswordModal.vue'
 
@@ -161,7 +161,7 @@ const specialties = ref([])
 
 const loadSpecialties = async () => {
     try {
-        const res = await axios.get("/api/doctors/specialties");
+        const res = await apiClient.get("/api/doctors/specialties");
         specialties.value = res.data;
     } catch (err) {
         console.error("Failed to load specialties", err);
@@ -204,7 +204,7 @@ const fetchUser = async () => {
             endpoint = `/api/admin/staff/${props.id}`
         }
         
-        const res = await axios.get(endpoint, {
+        const res = await apiClient.get(endpoint, {
             headers: { Authorization: `Bearer ${token}` }
         })
         
@@ -273,7 +273,7 @@ const updateProfile = async () => {
             IsSuspended: form.value.isSuspended
         }
 
-        await axios.put(endpoint, payload, {
+        await apiClient.put(endpoint, payload, {
             headers: { Authorization: `Bearer ${token}` }
         })
         alertStore.showAlert('Profile updated successfully', 'success')
@@ -296,7 +296,7 @@ const toggleSuspension = async () => {
             endpoint = `/api/admin/staff/${user.value.id}/toggle-status`
         }
 
-        await axios.post(endpoint, {}, {
+        await apiClient.post(endpoint, {}, {
             headers: { Authorization: `Bearer ${token}` }
         })
         
@@ -320,7 +320,7 @@ const handleResetPassword = async (tempPassword) => {
             endpoint = `/api/admin/staff/${user.value.id}/reset-password`
         }
 
-        await axios.post(endpoint, {
+        await apiClient.post(endpoint, {
             password: tempPassword
         }, {
             headers: { Authorization: `Bearer ${token}` }

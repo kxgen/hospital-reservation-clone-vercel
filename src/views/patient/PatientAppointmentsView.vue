@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAuthStore } from '@/stores/auth'
 import AppointmentCard from '@/components/AppointmentCard.vue'
 
@@ -20,7 +20,7 @@ const getAuthHeaders = () => ({
 const fetchUpcoming = async () => {
   isLoading.value = true
   try {
-    const res = await axios.get(`/api/patient/appointments/upcoming`, getAuthHeaders())
+    const res = await apiClient.get(`/api/patient/appointments/upcoming`, getAuthHeaders())
     upcomingAppointments.value = res.data
   } catch (err) {
     console.error('Fetch upcoming failed:', err)
@@ -32,7 +32,7 @@ const fetchUpcoming = async () => {
 const fetchHistory = async () => {
   isLoading.value = true
   try {
-    const res = await axios.get(`/api/patient/appointments/history`, getAuthHeaders())
+    const res = await apiClient.get(`/api/patient/appointments/history`, getAuthHeaders())
     historyAppointments.value = res.data
   } catch (err) {
     console.error('Fetch history failed:', err)
@@ -44,7 +44,7 @@ const fetchHistory = async () => {
 const fetchPending = async () => {
   isLoading.value = true
   try {
-    const res = await axios.get(`/api/patient/appointments/pending`, getAuthHeaders())
+    const res = await apiClient.get(`/api/patient/appointments/pending`, getAuthHeaders())
     pendingAppointments.value = res.data
   } catch (err) {
     console.error('Fetch pending failed:', err)

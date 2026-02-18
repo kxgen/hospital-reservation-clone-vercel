@@ -85,7 +85,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
-import axios from "@/api/axios";
+import apiClient from "@/api/axios";
 import LoadingBar from "@/components/LoadingBar.vue";
 import { useAlertStore } from "@/stores/alertStore";
 
@@ -116,7 +116,7 @@ const loadData = async () => {
       endpoint = "/api/admin/staff";
     }
 
-    const res = await axios.get(endpoint, {
+    const res = await apiClient.get(endpoint, {
       headers: { Authorization: `Bearer ${token}` }
     });
     

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAuthStore } from '@/stores/auth'
 import { useAlertStore } from '@/stores/alertStore'
 import TimeSlotModal from '@/components/TimeSlotModal.vue'
@@ -39,7 +39,7 @@ const getAuthHeaders = () => ({
 const fetchAppointmentDetail = async () => {
   isLoading.value = true
   try {
-    const res = await axios.get(`/api/appointments/${props.id}`, getAuthHeaders())
+    const res = await apiClient.get(`/api/appointments/${props.id}`, getAuthHeaders())
     appointment.value = res.data
     editReason.value = res.data.reason
   } catch (err) {
@@ -54,7 +54,7 @@ const fetchAppointmentDetail = async () => {
 
 const fetchAvailableSlots = async () => {
   try {
-    const res = await axios.get(
+    const res = await apiClient.get(
       `/api/appointments/${props.id}/available-slots`,
       getAuthHeaders()
     )
@@ -84,7 +84,7 @@ const saveChanges = async () => {
     
     // For now, let's just update the local state if no backend support yet, OR I can add it to the backend.
     // The user mentioned "setup the proper backend to function properly" so I should add it.
-    await axios.put(`/api/appointments/${appointment.value.id}/update-reason`, { reason: editReason.value }, getAuthHeaders())
+    await apiClient.put(`/api/appointments/${appointment.value.id}/update-reason`, { reason: editReason.value }, getAuthHeaders())
     
     appointment.value.reason = editReason.value
     isEditing.value = false
@@ -107,7 +107,7 @@ const handleCancelRequest = () => {
 
 const performCancel = async () => {
   try {
-    await axios.put(`/api/appointments/${appointment.value.id}/cancel`, {}, getAuthHeaders())
+    await apiClient.put(`/api/appointments/${appointment.value.id}/cancel`, {}, getAuthHeaders())
     appointment.value.status = 'Cancelled'
     closeConfirm()
     alerts.showAlert('Appointment cancelled successfully.', 'success')
@@ -137,7 +137,7 @@ const handleRescheduleSelect = (selection) => {
 
 const performReschedule = async ({ startTime, endTime }) => {
   try {
-    await axios.put(
+    await apiClient.put(
       `/api/appointments/${appointment.value.id}/reschedule`,
       { NewStartTime: startTime, NewEndTime: endTime },
       getAuthHeaders()

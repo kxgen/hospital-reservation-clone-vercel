@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAuthStore } from '@/stores/auth'
 import TimeSlotModal from '@/components/TimeSlotModal.vue'
 
@@ -58,10 +58,10 @@ const fetchData = async () => {
   loading.value = true
   try {
     const [docsRes, specsRes] = await Promise.all([
-      axios.get('/api/doctors', {
+      apiClient.get('/api/doctors', {
         headers: { Authorization: `Bearer ${auth.token}` }
       }),
-      axios.get('/api/doctors/specialties')
+      apiClient.get('/api/doctors/specialties')
     ])
     
     doctors.value = docsRes.data.map(doc => ({

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 
 export const useAuthStore = defineStore('auth', () => {
   // State (Reactive RAM)
@@ -51,7 +51,7 @@ export const useAuthStore = defineStore('auth', () => {
   async function fetchUnreadCount() {
     if (!token.value || role.value?.toLowerCase() !== 'patient') return
     try {
-      const res = await axios.get('/api/notifications/unread-count', {
+      const res = await apiClient.get('/api/notifications/unread-count', {
         headers: { 'Authorization': `Bearer ${token.value}` }
       })
       unreadNotificationCount.value = res.data.count || 0

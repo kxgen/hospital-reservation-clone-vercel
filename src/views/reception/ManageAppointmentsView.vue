@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAuthStore } from '@/stores/auth'
 import { useAlertStore } from '@/stores/alertStore'
 import { formatTime, formatDate, toLocalDateString } from '@/utils/dateFormatter'
@@ -49,7 +49,7 @@ const rescheduleData = ref({ appointmentId: null, doctor: null, date: null, slot
 const fetchSchedule = async () => {
   isLoading.value = true
   try {
-    const res = await axios.get(`/api/receptionist/appointments/upcoming`, {
+    const res = await apiClient.get(`/api/receptionist/appointments/upcoming`, {
       headers: { Authorization: `Bearer ${auth.token}` }
     })
     allAppointments.value = res.data || []
@@ -63,7 +63,7 @@ const fetchSchedule = async () => {
 const fetchMyBookings = async () => {
     isLoading.value = true
     try {
-        const res = await axios.get(`/api/receptionist/my-bookings`, {
+        const res = await apiClient.get(`/api/receptionist/my-bookings`, {
             headers: { Authorization: `Bearer ${auth.token}` }
         })
         myAppointments.value = res.data || []
@@ -77,7 +77,7 @@ const fetchMyBookings = async () => {
 const fetchManaged = async () => {
   isLoading.value = true
   try {
-    const res = await axios.get(`/api/appointments/managed`, {
+    const res = await apiClient.get(`/api/appointments/managed`, {
       headers: { Authorization: `Bearer ${auth.token}` }
     })
     managedAppointments.value = res.data || []
@@ -91,7 +91,7 @@ const fetchManaged = async () => {
 const fetchPending = async () => {
     isLoading.value = true
     try {
-        const res = await axios.get(`/api/receptionist/appointments/pending`, {
+        const res = await apiClient.get(`/api/receptionist/appointments/pending`, {
             headers: { Authorization: `Bearer ${auth.token}` }
         })
         pendingAppointments.value = res.data || []
@@ -203,7 +203,7 @@ const currentDataList = computed(() => {
 // --- Action Methods ---
 const checkIn = async (id) => {
     try {
-        await axios.post(`/api/receptionist/check-in`, { id }, {
+        await apiClient.post(`/api/receptionist/check-in`, { id }, {
             headers: { Authorization: `Bearer ${auth.token}` }
         })
         loadTabData()
@@ -221,7 +221,7 @@ const cancelAppointment = async (id) => {
         type: 'danger',
         onConfirm: async () => {
              try {
-                await axios.put(`/api/appointments/${id}/cancel`, {}, {
+                await apiClient.put(`/api/appointments/${id}/cancel`, {}, {
                     headers: { Authorization: `Bearer ${auth.token}` }
                 })
                 alertStore.showAlert('Appointment cancelled successfully.', 'success')
@@ -237,7 +237,7 @@ const cancelAppointment = async (id) => {
 const openReschedule = async (apt) => {
     try {
         isLoading.value = true
-        const res = await axios.get(`/api/doctors/${apt.doctorId}`, {
+        const res = await apiClient.get(`/api/doctors/${apt.doctorId}`, {
              headers: { Authorization: `Bearer ${auth.token}` }
         })
         const doctor = res.data
@@ -257,7 +257,7 @@ const openReschedule = async (apt) => {
 
 const handleRescheduleSelection = async (slotData) => {
     try {
-        await axios.put(`/api/appointments/${rescheduleData.value.appointmentId}/reschedule`, {
+        await apiClient.put(`/api/appointments/${rescheduleData.value.appointmentId}/reschedule`, {
             NewStartTime: slotData.startTime,
             NewEndTime: slotData.endTime
         }, {
@@ -279,7 +279,7 @@ const markNoShow = async (id) => {
         type: 'warning',
         onConfirm: async () => {
              try {
-                await axios.post(`/api/receptionist/appointments/${id}/no-show`, {}, {
+                await apiClient.post(`/api/receptionist/appointments/${id}/no-show`, {}, {
                     headers: { Authorization: `Bearer ${auth.token}` }
                 })
                 alertStore.showAlert('Marked as no-show.', 'success')

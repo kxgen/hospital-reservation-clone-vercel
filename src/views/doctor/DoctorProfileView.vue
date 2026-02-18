@@ -140,7 +140,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAuthStore } from '@/stores/auth'
 import { useAlertStore } from '@/stores/alertStore'
 import Skeleton from '@/components/Skeleton.vue'
@@ -173,7 +173,7 @@ const security = reactive({
 const fetchProfile = async () => {
   try {
     dataLoaded.value = false
-    const res = await axios.get('/api/profile', {
+    const res = await apiClient.get('/api/profile', {
       headers: { Authorization: `Bearer ${auth.token}` }
     })
     const data = res.data
@@ -205,7 +205,7 @@ const updateProfile = async () => {
       bio: profile.bio,
       specialtyId: profile.specialtyId
     }
-    await axios.put('/api/profile', dto, {
+    await apiClient.put('/api/profile', dto, {
       headers: { Authorization: `Bearer ${auth.token}` }
     })
     isEditingProfile.value = false
@@ -223,7 +223,7 @@ const updatePassword = async () => {
   }
   secLoading.value = true
   try {
-    await axios.post('/api/profile/change-password', {
+    await apiClient.post('/api/profile/change-password', {
       current: security.oldPassword,
       new: security.newPassword
     }, {

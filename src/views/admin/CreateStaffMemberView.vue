@@ -84,7 +84,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "@/api/axios";
+import apiClient from "@/api/axios";
 import { useAlertStore } from '@/stores/alertStore'
 import { useAuthStore } from '@/stores/auth'
 
@@ -107,7 +107,7 @@ const form = ref({
 
 const loadSpecialties = async () => {
     try {
-        const res = await axios.get("/api/doctors/specialties");
+        const res = await apiClient.get("/api/doctors/specialties");
         specialties.value = res.data; // [{id, name}, ...]
     } catch (err) {
         console.error("Failed to load specialties", err);
@@ -131,7 +131,7 @@ const submit = async () => {
   if (payload.Role !== 2) payload.SpecialtyId = 0;
 
   try {
-    await axios.post(
+    await apiClient.post(
       "/api/admin/createStaff",
       payload,
       {

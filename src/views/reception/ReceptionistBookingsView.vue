@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAuthStore } from '@/stores/auth'
 import { useAlertStore } from '@/stores/alertStore'
 import { formatTime, formatDate } from '@/utils/dateFormatter'
@@ -28,7 +28,7 @@ const isLoading = ref(true)
 const fetchMyBookings = async () => {
     isLoading.value = true
     try {
-        const res = await axios.get(`/api/receptionist/my-bookings`, {
+        const res = await apiClient.get(`/api/receptionist/my-bookings`, {
             headers: { Authorization: `Bearer ${auth.token}` }
         })
         myAppointments.value = res.data || []
@@ -47,7 +47,7 @@ const cancelAppointment = async (id) => {
         type: 'danger',
         onConfirm: async () => {
              try {
-                await axios.put(`/api/appointments/${id}/cancel`, {}, {
+                await apiClient.put(`/api/appointments/${id}/cancel`, {}, {
                     headers: { Authorization: `Bearer ${auth.token}` }
                 })
                 alertStore.showAlert('Appointment cancelled.', 'success')
@@ -73,7 +73,7 @@ const rescheduleData = ref({ appointmentId: null, doctor: null, date: null, slot
 const openReschedule = async (apt) => {
     try {
         isLoading.value = true
-        const res = await axios.get(`/api/doctors/${apt.doctorId}`, {
+        const res = await apiClient.get(`/api/doctors/${apt.doctorId}`, {
              headers: { Authorization: `Bearer ${auth.token}` }
         })
         
@@ -101,7 +101,7 @@ const handleRescheduleSelection = async (slotData) => {
             NewStartTime: slotData.startTime,
             NewEndTime: slotData.endTime
         }
-        await axios.put(`/api/appointments/${rescheduleData.value.appointmentId}/reschedule`, payload, {
+        await apiClient.put(`/api/appointments/${rescheduleData.value.appointmentId}/reschedule`, payload, {
             headers: { Authorization: `Bearer ${auth.token}` }
         })
         alertStore.showAlert(`Rescheduled successfully to ${slotData.timeLabel}`, 'success')

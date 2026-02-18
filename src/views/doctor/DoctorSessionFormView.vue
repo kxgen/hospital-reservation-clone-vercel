@@ -153,7 +153,7 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAuthStore } from '@/stores/auth'
 import { useAlertStore } from '@/stores/alertStore'
 import { formatDate, formatTime } from '@/utils/dateFormatter'
@@ -204,7 +204,7 @@ watch(isResolved, (newVal) => {
 const fetchFollowupDetails = async () => {
     loading.value = true
     try {
-        const res = await axios.get(`/api/appointments/${appointmentId}/followup-details`, {
+        const res = await apiClient.get(`/api/appointments/${appointmentId}/followup-details`, {
             headers: { Authorization: `Bearer ${auth.token}` }
         })
         data.value = res.data
@@ -219,7 +219,7 @@ const fetchFollowupDetails = async () => {
 
 const fetchDoctorInfo = async () => {
     try {
-        const doctorsRes = await axios.get('/api/doctors')
+        const doctorsRes = await apiClient.get('/api/doctors')
         
         // Find doctor by ID from the current appointment
         if (currentApt.value.doctorId) {
@@ -285,13 +285,13 @@ const executeFinalization = async () => {
             ParentAppointmentId: appointmentId
           }
           
-          await axios.post('/api/appointments', payload, {
+          await apiClient.post('/api/appointments', payload, {
             headers: { Authorization: `Bearer ${auth.token}` }
           })
       }
 
       // 2. Finalize current appointment
-      await axios.post(`/api/appointments/${appointmentId}/finalize`, {
+      await apiClient.post(`/api/appointments/${appointmentId}/finalize`, {
           DoctorReminder: summary.value,
           IsResolved: isResolved.value
       }, {

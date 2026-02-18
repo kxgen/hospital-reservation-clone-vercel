@@ -1,7 +1,7 @@
 <script setup>
 import Header from '@/layouts/Header.vue'
 import Footer from '@/layouts/Footer.vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
@@ -24,7 +24,7 @@ const roleRoutes = {
 
 const login = async () => {
   try {
-    const response = await axios.post('/api/account/login', {
+    const response = await apiClient.post('/api/account/login', {
       email: email.value,
       password: password.value,
     })

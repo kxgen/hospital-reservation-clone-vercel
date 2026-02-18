@@ -1,6 +1,6 @@
 <script setup>
     import { ref, onMounted } from 'vue'
-    import axios from '@/api/axios'
+    import apiClient from '@/api/axios'
     import { useAuthStore } from '@/stores/auth'
     import { formatTime as formatTimeUtil } from '@/utils/dateFormatter'
     import { useAlertStore } from '@/stores/alertStore'
@@ -19,7 +19,7 @@
       if (!auth.token) return
       try {
         loading.value = true
-        const response = await axios.get('/api/patient/dashboard', {
+        const response = await apiClient.get('/api/patient/dashboard', {
           headers: { Authorization: `Bearer ${auth.token}` },
         })
         patientName.value = response.data.patientName

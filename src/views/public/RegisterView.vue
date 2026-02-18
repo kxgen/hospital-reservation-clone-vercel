@@ -2,7 +2,7 @@
 import { reactive, ref } from 'vue'
 import Header from '@/layouts/Header.vue'
 import Footer from '@/layouts/Footer.vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useRouter } from 'vue-router'
 import { useAlertStore } from '@/stores/alertStore'
 
@@ -55,7 +55,7 @@ const register = async function () {
 
   try {
     console.log(form)
-    const response = await axios.post('/api/account/register', form)
+    const response = await apiClient.post('/api/account/register', form)
 
     // Success handling
     alertStore.showAlert('Registration successful. You can now login.', 'success')

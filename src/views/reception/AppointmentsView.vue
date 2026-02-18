@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useAlertStore } from '@/stores/alertStore'
@@ -24,7 +24,7 @@ const itemsPerPage = 8
 const fetchSchedule = async () => {
   isLoading.value = true
   try {
-    const res = await axios.get(`/api/receptionist/appointments/upcoming`, {
+    const res = await apiClient.get(`/api/receptionist/appointments/upcoming`, {
       headers: { Authorization: `Bearer ${auth.token}` }
     })
     allAppointments.value = res.data || []
@@ -125,7 +125,7 @@ const setTab = (tab) => {
 
 const checkIn = async (id) => {
     try {
-        await axios.post(`/api/receptionist/check-in`, { id }, {
+        await apiClient.post(`/api/receptionist/check-in`, { id }, {
             headers: { Authorization: `Bearer ${auth.token}` }
         })
         const apt = allAppointments.value.find(a => a.id === id)

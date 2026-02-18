@@ -79,7 +79,7 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from "vue";
-import axios from "@/api/axios";
+import apiClient from "@/api/axios";
 import Pagination from "@/components/Pagination.vue";
 
 const logs = ref([]);
@@ -105,7 +105,7 @@ const loadLogs = async (page = 1) => {
         date: filter.value.date || null
     };
     
-    const res = await axios.get("/api/admin/logs", {
+    const res = await apiClient.get("/api/admin/logs", {
         params,
         headers: { Authorization: `Bearer ${token}` }
     });

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { formatTime, formatDate, toLocalDateString } from '@/utils/dateFormatter'
@@ -27,7 +27,7 @@ const openDetails = (apt) => {
 const fetchSchedule = async () => {
   isLoading.value = true
   try {
-    const res = await axios.get(`/api/appointments/doctor-schedule`, {
+    const res = await apiClient.get(`/api/appointments/doctor-schedule`, {
       headers: { Authorization: `Bearer ${auth.token}` }
     })
     allAppointments.value = res.data || []

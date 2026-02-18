@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAuthStore } from '@/stores/auth'
 import { formatTime } from '@/utils/dateFormatter'
 import Skeleton from '@/components/Skeleton.vue'
@@ -31,7 +31,7 @@ const todayAgenda = computed(() => {
 const fetchDashboardData = async () => {
   try {
     loading.value = true
-    const res = await axios.get(`/api/appointments/doctor-schedule`, {
+    const res = await apiClient.get(`/api/appointments/doctor-schedule`, {
       headers: { Authorization: `Bearer ${auth.token}` }
     })
     

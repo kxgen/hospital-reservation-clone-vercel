@@ -5,7 +5,7 @@ import DoctorCard from '@/components/DoctorCard.vue'
 import AppLoader from '@/components/LoadingBar.vue'
 import { useLoaderStore } from '@/stores/loader'
 import { ref, computed, onMounted, watch } from 'vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 
 const loaderStore = useLoaderStore()
 const searchQuery = ref('')
@@ -86,7 +86,7 @@ const fetchDoctors = async () => {
       specialties: selectedSpecialties.value.join(','),
       gender: selectedGender.value || 'both'
     }
-    const response = await axios.get('/api/doctors', { params })
+    const response = await apiClient.get('/api/doctors', { params })
     rawDoctors.value = response.data.map((doc) => ({
       id: doc.id,
       name: doc.fullName,
@@ -123,7 +123,7 @@ watch([selectedSpecialties, selectedGender], () => {
 onMounted(async () => {
   try {
     // Fetch specialties
-    const specialtiesRes = await axios.get('/api/doctors/specialties')
+    const specialtiesRes = await apiClient.get('/api/doctors/specialties')
     availableSpecialties.value = specialtiesRes.data.map(s => s.name)
   } catch (error) {
     console.error('Error fetching specialties:', error)

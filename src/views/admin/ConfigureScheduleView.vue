@@ -89,7 +89,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import { useAlertStore } from '@/stores/alertStore'
 
 /* -------------------- CONSTANTS -------------------- */
@@ -209,7 +209,7 @@ const saveSchedule = async () => {
       }
     })
 
-    await axios.post(
+    await apiClient.post(
       `/api/admin/doctors/${doctorId}/availability`,
       payload,
       { headers: { Authorization: `Bearer ${token}` } }
@@ -228,14 +228,14 @@ const loadAvailability = async () => {
     const token = localStorage.getItem('token')
     
     // Load doctor name
-    const dr = await axios.get(
+    const dr = await apiClient.get(
       `/api/admin/staff/${doctorId}`,
       { headers: { Authorization: `Bearer ${token}` } }
     )
     doctorName.value = `Dr. ${dr.data.firstName} ${dr.data.lastName}`
 
     // Load schedule
-    const res = await axios.get(
+    const res = await apiClient.get(
       `/api/admin/doctors/${doctorId}/availability`,
       { headers: { Authorization: `Bearer ${token}` } }
     )

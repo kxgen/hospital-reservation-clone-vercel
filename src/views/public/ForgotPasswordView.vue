@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import axios from '@/api/axios'
+import apiClient from '@/api/axios'
 import Header from '@/layouts/Header.vue'
 import Footer from '@/layouts/Footer.vue'
 
@@ -14,7 +14,7 @@ const submitRequest = async () => {
     isLoading.value = true
     errorMessage.value = ''
     try {
-        await axios.post('/api/account/forgot-password', {
+        await apiClient.post('/api/account/forgot-password', {
             email: email.value
         })
         step.value = 2
@@ -35,7 +35,7 @@ const verifyOtp = async () => {
     isLoading.value = true
     errorMessage.value = ''
     try {
-        await axios.post('/api/account/reset-password-otp', {
+        await apiClient.post('/api/account/reset-password-otp', {
             email: email.value,
             otp: otp.value
         })
