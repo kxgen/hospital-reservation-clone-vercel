@@ -217,7 +217,9 @@ const saveSchedule = async () => {
     alerts.showAlert('Weekly schedule updated successfully', 'success')
   } catch (error) {
     console.error('Save failed:', error)
-    alerts.showAlert('Failed to save schedule', 'error')
+    const errorMsg = error.response?.data?.Message || error.response?.data?.message || 'Failed to save schedule'
+    const detail = error.response?.data?.Detail || error.response?.data?.detail
+    alerts.showAlert(`${errorMsg}${detail ? ': ' + detail : ''}`, 'error')
   } finally {
     saving.value = false
   }
